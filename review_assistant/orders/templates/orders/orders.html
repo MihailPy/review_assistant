@@ -1,0 +1,50 @@
+{% extends "base_generic.html" %}
+{% block content %}
+<div class="container">
+    <h2 class="display-5">Заказы</h2>
+    {% if orders.count > 0 %}
+        <div class="row row-cols-auto g2">
+            {% for order in orders %}
+            <div class="col h-auto" style="width: 440px;">
+                <div class="card mb-3 mw-100" style="max-width: 400px;">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="{{order.photo.url}}" class="img-fluid rounded-start">
+
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-header">
+                                <h5 class="card-title">
+                                   id: <a href="/order/{{order.id}}">{{order.id}}</a>
+                                </h5>
+
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">Кол-во: {{order.amount}}</p>
+                                <p class="card-text">Желаемые исполнители</p>
+                                <div class="form-check">
+                                  <input class="form-check-input" type="checkbox" value="" id="flexCheckDisabled" {% if order.gender_man == True %} checked {% endif %} disabled>
+                                  <label class="form-check-label" for="flexCheckDisabled">
+                                    Муж
+                                  </label>
+                                </div>
+                                <div class="form-check">
+                                  <input class="form-check-input" type="checkbox" value="" id="flexCheckDisabled1" {% if order.gender_woman == True %} checked {% endif %} disabled>
+                                  <label class="form-check-label" for="flexCheckDisabled1">
+                                      Жен
+                                  </label>
+                                </div>
+                                <a href="{{order.link_to_account}}" class="card-link">Ссылка на обявление</a>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            {% endfor %}
+        </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

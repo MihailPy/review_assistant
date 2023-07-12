@@ -1,0 +1,114 @@
+{% extends "base_generic.html" %}
+{% block content %}
+<div class="bd-example-snippet bd-code-snippet container">
+    <h2>Форма изменения заказа</h2>
+    {{ form.errors }}
+    {{ form.non_field_errors }}
+    <form method="post" action="/edit_order/{{order.id}}" class="needs-validation" enctype="multipart/form-data" novalidate>
+        {% csrf_token %}
+        <div class="row justify-content-center">
+            <div class="col-md-3 p-1">
+                <label class="form-label">Заказчик</label>
+                <label class="form-control"><a href="/customer/{{customer.id}}">№{{customer.id}}: {{customer.name}} {{customer.last_name}}</a></label>
+            </div>
+            <div class="col-md-3 p-1">
+                <label class="form-label">Номер телефона</label>
+                <label class="form-control">{{customer.phone}}</label>
+            </div>
+        </div>
+        <div class="row justify-content-center align-items-end">
+            <div class="col-md-4 p-1">
+                <label class="form-label">{{form.amount.label }}</label><br>
+                {{form.amount }}
+            </div>
+
+            <div class="col-md-1 p-1">
+                <label class="form-label">{{form.gender_man.label}}</label>
+                {{form.gender_man}}
+            </div>
+            <div class="col-md-1 p-1">
+                <label class="form-label">{{form.gender_woman.label}}</label>
+                {{form.gender_woman}}
+            </div>
+        </div>
+        <div class="row justify-content-center align-items-center">
+            <div class="col-md-6 p-1">
+                <label class="form-label">{{form.link_to_account.label}}</label>
+                {{form.link_to_account}}
+            </div>
+        </div>
+        <div class="row justify-content-center align-items-center">
+            <div class="col-md-6 p-1">
+                <label class="form-label">{{form.date_order_start.label}}</label>
+                {{form.date_order_start}}
+            </div>
+        </div>
+        <div class="row justify-content-center align-items-center">
+            <div class="col-md-6 p-1">
+                <label class="form-label">{{form.date_order_end.label}}</label>
+                {{form.date_order_end}}
+            </div>
+        </div>
+        <div class="row justify-content-center align-items-center">
+            <div class="col-md-6 p-1">
+                <label class="form-label">{{form.photo.label}}</label>
+                {{form.photo}}
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-6 p-1">
+                <label class="form-label">{{form.text.label}}</label><br>
+                {{form.text}}
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-6 p-1">
+                <label class="form-label">{{form.notes.label}}</label>
+                {{form.notes}}
+            </div>
+        </div>
+        <div class="row justify-content-center align-items-end">
+            <div class="col-md-2 p-1">
+                <label class="form-label">{{form.prepayment.label}}</label>
+                {{form.prepayment}}
+            </div>
+            <div class="col-md-2 p-1">
+                <label class="form-label">{{form.paymant.label}}</label>
+                {{form.paymant}}
+            </div>
+            <div class="col-md-2 p-1">
+                <label class="form-label">{{form.hide_order.label}}</label>
+                {{form.hide_order}}
+            </div>
+        </div>
+        <div class="row g-5 justify-content-around">
+            <div class="col-md-3"></div>
+            <div class="col-md-4  p-1">
+                <a href="/order/{{order.id}}" class="btn btn-secondary">Закрыть</a>
+                <button type="submit" class="btn btn-primary">Сохранить</button>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+(() => {
+  'use strict'
+
+  // Fetch all the forms we want to apply custom Bootstrap validation styles to
+  const forms = document.querySelectorAll('.needs-validation')
+
+  // Loop over them and prevent submission
+  Array.from(forms).forEach(form => {
+    form.addEventListener('submit', event => {
+      if (!form.checkValidity()) {
+        event.preventDefault()
+        event.stopPropagation()
+      }
+
+      form.classList.add('was-validated')
+    }, false)
+  })
+})()
+</script>
+{% endblock %}

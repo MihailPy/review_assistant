@@ -1,0 +1,23 @@
+{% extends "base_generic.html" %}
+{% block content %}
+<div class="bd-example-snippet bd-code-snippet container">
+    <h2 class="display-5"></h2>
+    <div class="card mb-3 h-auto" style="max-width: 400px;">
+        <div class="card-header">
+            <h5 class="card_title">
+                №{{customer.id}} {{customer.name}}
+            </h5>
+        </div>
+        <div class="card-body mb-3 p-2">
+            <p class="card-text">Заказчик: {{customer.name}} {{customer.last_name}}</p>
+            <a href="tel:{{customer.phone}}" class="card-link">Телефон {{customer.phone}}</a><br>
+            <a href="{{customer.tg_un}}" class="card-link">Телеграм</a><br>
+            <p class="card-text">{{customer.notes}}</p>
+        </div>
+        <div class="card-footer">
+            <a type="button" href="/edit_customer/{{customer.id}}" class="btn btn-primary">Изменить</a>
+            <a type="button" href="/delete_customer/{{customer.id}}" class="btn btn-danger">Удалить</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
