@@ -1,64 +1,23 @@
-{% extends "base_generic.html" %}
+{% extends "review_assistant/base_generic.html" %}
 {% block content %}
 <div class="bd-example-snippet bd-code-snippet container">
-    <div class="card mb-5 " >
+    <div class="card mb-5 shadow" , style="max-width: 700px;">
         <div class="row g-0 d-flex">
-            <div class="col-md-5 flex-shrink-0">
-                <div id="carousel" class="carousel slide" data-bs-pause="mouseenter">
-                      <div class="carousel-inner">
-                          {% for i in img %}
-                            <div class="carousel-item {%if i == img.0 %}active{% endif %}">
-                                <img src="{{i.img.url}}" class="d-block w-100" style="max-hight: 100px;" id={{i.id}}>
-                            </div>
-                          {% endfor %}
-                      </div>
-                      <ol class="carousel-indicators">
-                        {% for i in l %}
-                            <li data-bs-target="#carousel" data-bs-slide-to="{{i.1}}" class="{%if i.1 == 0 %}active{% endif %}">
-                                <img src="{{i.0.img.url}}" class="d-block w-100" style="max-hight: 10px;">
-                            </li>
-<!--                            <button type="button" data-bs-target="#carousel" data-bs-slide-to="{{i.id}}" class="{%if i == img.0 %}active{% endif %}" aria-current="true" aria-label="{{i.id}}"></button>-->
-                        {% endfor %}
-                      </ol>
-                      <button class="carousel-control-prev" type="button" data-bs-target="#carousel" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
-                      </button>
-                      <button class="carousel-control-next" type="button" data-bs-target="#carousel" data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                      </button>
-                </div>
-                <script>var myCarousel = document.querySelector('#carousel')
-                        var carousel = new bootstrap.Carousel(myCarousel)</script>
-            </div>
-            <div class="col-md-7 d-flex align-items-start flex-column">
+            <div class="d-flex align-items-start flex-column">
                 <div class="card-header w-100">
                     <h5 class="card-title">
                        №{{order.id}}
                     </h5>
-
                 </div>
                 <div class="card-body flex-wrap">
                     <p class="card-text">Заказтчик: №{{customer.id}}: {{customer.name}} {{customer.last_name}}</p>
                     <a href="tel:{{customer.phone}}" class="card-link">Телефон заказтчика</a>
-                    <a href="tel:{{order.link_to_account}}" class="card-link">Ссылка на обявление</a>
+                    <a href="tel:{{order.link_to_account}}" class="card-link">Ссылка на аккаунт</a>
                     <p class="card-text">Кол-во: {{order.amount}}</p>
-                    <p class="card-text">Желаемые исполнители</p>
-                    <div class="form-check">
-                      <input class="form-check-input" type="checkbox" value="" id="flexCheckDisabled" {% if order.gender_man == True %} checked {% endif %} disabled>
-                      <label class="form-check-label" for="flexCheckDisabled">
-                        Муж
-                      </label>
-                    </div>
-                    <div class="form-check">
-                      <input class="form-check-input" type="checkbox" value="" id="flexCheckDisabled1" {% if order.gender_woman == True %} checked {% endif %} disabled>
-                      <label class="form-check-label" for="flexCheckDisabled1">
-                          Жен
-                      </label>
-                    </div>
+                    <p class="card-text w-90">Начиная с '{{order.date_order_start}}' будут сделаны {{order.amount}}
+                        отзывов, с частатой '{{frequence}}' отзыв(-а) за период '{{order.date_order_start}}-{{order.date_order_end}}'</p>
                     <label for="floatingTextarea1">Заметки</label>
-                    <p class="form-control" placeholder="Заметки закза" id="floatingTextarea1"
+                    <p class="form-control w-90" placeholder="Заметки закза" id="floatingTextarea1"
                               name="notes" style="height: 50px"disabled>{{order.notes}}</p>
                     <div class="form-check">
                       <input class="form-check-input" type="checkbox" value="" id="flexCheckDisabled2" {% if order.prepayment == True %} checked {% endif %} disabled>
@@ -72,17 +31,38 @@
                           Оплата
                       </label>
                     </div>
+                    <div>
+                        {% for v in valid %}
+                            {% if v.text_reviews_error %}
+                            <div class="alert alert-warning w-75" role="alert">
+                            Количество текстов для отзывов меньше чем заданое число отзывов
+                             <button type="button" class="btn-close position-absolute top-50 end-0 translate-middle-y p-3" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                            {% elif v.img_error %}
+                            <div class="alert alert-warning w-75" role="alert">
+                            Количество скриншотов не совпадает с числом отзывов
+                             <button type="button" class="btn-close position-absolute top-50 end-0 translate-middle-y p-3" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                            {% elif v.executors_error %}
+                            <div class="alert alert-warning w-75" role="alert">
+                            У вас нехватает исполнителей
+                             <button type="button" class="btn-close position-absolute top-50 end-0 translate-middle-y p-3" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
                 </div>
                 <div class="card-footer mt-auto w-100">
                     <a type="button" class="btn btn-outline-success" href="/edit_order/{{order.id}}" style="margin-bottom:5px">Изменить</a>
                     <a type="button" class="btn btn-secondary" href="/divide_into_tasks/{{order.id}}" style="margin-bottom:5px">Разделить на задачи</a>
+                    <a type="button" class="btn btn-primary" href="/edit_img/{{order.id}}" style="margin-bottom:5px">Добавить скриншот</a>
                 </div>
             </div>
         </div>
 <!--                    <img src="{{order.photo.url}}" alt="connect" style="max-height:300px">-->
 
     </div>
-    <div class="card mb-5 " style="max-width: 900px;">
+    <div class="card shadow mb-5 " style="max-width: 900px;">
         <div class="row g-0">
             <div class="col-md">
                 <div class="card-header">
@@ -91,99 +71,7 @@
                     </h5>
                 </div>
                 <div class="card-body table-responsive">
-                    <table class="table table-hover table-sm table-bordered">
-                        <thead>
-                            <tr>
-                                <th scope="col">Задача</th>
-                                <th scope="col">Исполнитель</th>
-                                <th scope="col">Дата начала</th>
-                                <th scope="col">Дата исполнения</th>
-                                <th scope="col">Выполненно?</th>
-                                <th scope="col">Оплата?</th>
-                                <th scope="col">Ошибка?</th>
-                                <th scope="col">Кнопки</th>
-                            </tr>
-                        </thead>
-                        <tbody class="table-group-divider">
-                        {% for task in tasks %}
-                            <tr class="{% if task.hitch == True and task.execution_or_no == None %}table-danger{% elif task.in_progres == True and task.execution_or_no == None %}table-primary{% elif task.execution_date != None and task.execution_or_no == None %}table-warning{% else %}{% endif %}">
-                                {{request.path}}
-                                <th scope="row">{{task.id}}</th>
-<!--                                <td><a href="/order/{{task.order_id}}">{{tesk.order_id.id}}</a></td>-->
-                                <td><a href="/#edit-executor-{{task.executor_id.id}}" data-toggle="edit-executor-{{task.executor_id.id}}"> {{task.executor_id.name}}</a></td>
-                                <td>{{task.date_of_completion }}</td>
-                                <td>
-                                    {{task.execution_date }}
-                                </td>
-                                <td>
-                                    <a href="{{task.image.url}}" class="card-link">Скриншот отзыва</a>
-                                </td>
-                                <td>
-                                    Исполнено:<input type="checkbox" class="form-check-input" {% if task.execution_or_no == True %} checked {% endif %} disabled>
-                                </td>
-                                <td>
-                                    <input type="checkbox" class="form-check-input" {% if task.paymant == True %} checked {% endif %} disabled>
-                                </td>
-                                <td>
-                                    <input type="checkbox" class="form-check-input" {% if task.hitch == True %} checked {% endif %} disabled>
-                                </td>
-                                <td><button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
-                                                    data-bs-target="#edit-task-{{task.id}}">Изменить</button></td>
-                            </tr>
-                            <div class="modal fade in" id="edit-task-{{task.id}}" tabindex="-1"
-                                 aria-labelledby="exampleModalLabel"
-                                 aria-hidden="true"
-                                 data-bs-keyboard="false" data-bs-backdrop="static">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h3 class="modal-title fs-5" id="exampleModalLabel">Изменить задачу '{{task.id}} {{task.date_of_completion}}'</h3>
-                                        </div>
-                                        <form method="post" action="/edit_task/{{task.id}}">
-                                            {% csrf_token %}
-                                            <div class="modal-body">
-                                                <div class="mb-3 p-2">
-                                                    <label  class="form-label">Исполнитель</label>
-                                                    <select class="form-select" aria-label="Default select example">
-                                                        {% for executor in executors %}
-                                                            <option {% if executor.id == task.executor_id.id %} selected{% endif %} value="{{executor}}">
-                                                                {{executor.id}} {{executor.name}}</option>
-                                                        {% endfor %}
-                                                    </select>
-                                                    <label  class="form-label">Дата начала выполнения</label>
-                                                    <input type="date" class="form-control" id="formGroupExampleInput4"
-                                                           value={{task.date_of_completion|date:'Y-m-d'}} name="date_of_completion"><br>
-                                                    <div class="form-floating">
-                                                        <textarea class="form-control" placeholder="Заметки заказчика" id="floatingTextarea2"
-                                                                  name="notes" style="height: 100px">{{task.text_review}}</textarea>
-                                                        <label >Текст отзыва</label>
-                                                    </div>
-                                                    <label class="form-label">Выберете если провели отзыв</label><br>
-                                                    <input type="hidden" name="execution_or_no" value=False class="form-check-input">
-                                                    <input type="checkbox" name="execution_or_no" value=True class="form-check-input" {% if task.execution_or_no == True %} checked {% endif %}>
-                                                    <label  class="form-label">Проверка</label><br>
-                                                    <label class="form-label">Выберете если исполнитнлю выплатили</label><br>
-                                                    <input type="hidden" name="paymant" value=False class="form-check-input">
-                                                    <input type="checkbox" name="paymant" value=True class="form-check-input" {% if task.paymant == True %} checked {% endif %}>
-                                                    <label  class="form-label">Оплатили</label>
-                                                    <label class="form-label">Выберете если произошла ошибка, снемите если иправили ошибку</label><br>
-                                                    <input type="hidden" name="hitch" value=False class="form-check-input">
-                                                    <input type="checkbox" name="hitch" value=True class="form-check-input" {% if task.hitch == True %} checked {% endif %}>
-                                                    <label  class="form-label">Ошибки</label>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
-                                                    <button type="submit" class="btn btn-primary">Сохранить</button>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-
-                        {% endfor %}
-                        </tbody>
-                    </table>
+                    {% include "tasks/tasks_layout.html" %}
                 </div>
             </div>
         </div>

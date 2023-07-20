@@ -1,25 +1,20 @@
-{% extends "base_generic.html" %}
+{% extends "review_assistant/base_generic.html" %}
 {% block content %}
 <div class="container">
     <h2 class="display-5">Заказы</h2>
     {% if orders.count > 0 %}
         <div class="row row-cols-auto g2">
             {% for order in orders %}
-            <div class="col h-auto" style="width: 440px;">
-                <div class="card mb-3 mw-100" style="max-width: 400px;">
+            <div class="col h-auto" style="width: 340px;">
+                <div class="card mb-3 mw-100 shadow" style="max-width: 400px;">
                     <div class="row g-0">
-                        <div class="col-md-4">
-                            <img src="{{order.photo.url}}" class="img-fluid rounded-start">
+                        <div class="card-header">
+                            <h5 class="card-title">
+                               id: <a href="/order/{{order.id}}">{{order.id}}</a>
+                            </h5>
 
                         </div>
-                        <div class="col-md-8">
-                            <div class="card-header">
-                                <h5 class="card-title">
-                                   id: <a href="/order/{{order.id}}">{{order.id}}</a>
-                                </h5>
-
-                            </div>
-                            <div class="card-body">
+                        <div class="card-body">
                                 <p class="card-text">Кол-во: {{order.amount}}</p>
                                 <p class="card-text">Желаемые исполнители</p>
                                 <div class="form-check">
@@ -37,7 +32,6 @@
                                 <a href="{{order.link_to_account}}" class="card-link">Ссылка на обявление</a>
 
                             </div>
-                        </div>
                     </div>
 
                 </div>

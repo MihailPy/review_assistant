@@ -1,0 +1,46 @@
+{% extends "review_assistant/base_generic.html" %}
+{% block content %}
+<div class="container">
+    <h2 class="display-5">Задачи</h2>
+    {% if orders.count > 0 %}
+    <div class="accordion" id="accordionExample">
+        {% for order in orders %}
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="heading{{order.id}}">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{order.id}}" aria-expanded="false" aria-controls="collapse{{order.id}}">
+                    Заказ: №{{order.id}}, Заказчик: {{order.customer.name}}, Кол-во отзывов: {{order.amount}}
+                  </button>
+                </h2>
+                <div id="collapse{{order.id}}" class="accordion-collapse collapse" aria-labelledby="heading{{order.id}}" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label class="form-label">Заказчик</label><br>
+                                <a href="/customer/{{order.customer.id}}">№{{order.customer.id}} {{order.customer.name}}</a>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Телефон заказчика</label>
+                                <a href="tel:{{order.customer.phone}}" class="card-link">{{order.customer.phone}}</a><br>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">Кол-во отзывов</label>
+                                <label class="form-control">{{order.amount}}</label>
+                            </div>
+                        </div>
+                        <div class="row py-3">
+                            <div class="row g-0">
+                                <div class="col-md">
+                                    <div class="table-responsive">
+                                        {% include "tasks/tasks_layout.html" %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+{% endblock %}

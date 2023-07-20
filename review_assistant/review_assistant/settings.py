@@ -14,8 +14,13 @@ from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+# BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'review_assistant/static/'),
+]
 
+STATIC_ROOT = BASE_DIR / 'static'
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
@@ -26,11 +31,11 @@ SECRET_KEY = 'django-insecure-osb3v70gwf%gscgz6&*%e5e!sn6503nx50pime)g&*r%&z5!3%
 DEBUG = True
 
 if DEBUG:
-    CSRF_TRUSTED_ORIGINS = ['http://8d80-185-3-33-100.ngrok-free.app', 'https://8d80-185-3-33-100.ngrok-free.app']
-CORS_ORIGIN_WHITELIST = ['8d80-185-3-33-100.ngrok-free.app']
-ALLOWED_HOSTS = ['8d80-185-3-33-100.ngrok-free.app', '127.0.0.1:8000', '127.0.0.1',]
+    CSRF_TRUSTED_ORIGINS = ['http://7ce0-188-170-175-199.ngrok-free.app', 'https://7ce0-188-170-175-199.ngrok-free.app']
+CORS_ORIGIN_WHITELIST = ['7ce0-188-170-175-199.ngrok-free.app']
+ALLOWED_HOSTS = ['7ce0-188-170-175-199.ngrok-free.app', '127.0.0.1:8000', '127.0.0.1',]
 
-MEDIA_ROOT =  os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media').replace('\\', '/')
 MEDIA_URL = '/media/'
 
 # Application definition
@@ -42,10 +47,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'review_assistant',
     'customers',
     'executors',
     'orders',
-    'tasks'
+    'tasks',
 ]
 
 MIDDLEWARE = [
@@ -63,7 +69,9 @@ ROOT_URLCONF = 'review_assistant.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'review_assistant/templates')
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

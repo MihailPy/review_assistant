@@ -1,4 +1,4 @@
-{% extends "base_generic.html" %}
+{% extends "review_assistant/base_generic.html" %}
 {% block content %}
 <div class="container">
     <h2 class="display-5">Заказчики</h2>
@@ -9,7 +9,7 @@
         <div class="row row-cols-auto">
             {% for customer in customers %}
             <div class="p-1">
-                <div class="card h-auto" style="max-width: 400px;">
+                <div class="card h-auto shadow" style="max-width: 400px;">
                     <div class="card-header">
                         <h5 class="card_title">
                             <a href="/customer/{{customer.id}}">№{{customer.id}} {{customer.name}}</a>

@@ -1,3 +1,5 @@
+import re
+from executors.models import Executor
 from .models import Image_order
 
 
@@ -25,12 +27,12 @@ def save_order(request, order, customer):
     return order
 
 
-def save_images(request):
-    if request.FILES.getlist("photo") is not None:
-        for p in request.FILES.getlist("photo"):
-            image = Image_order()
-            image.img = p
-            image.save()
+def save_images(img, order):
+    print(img)
+    image = Image_order()
+    image.order = order
+    image.img = img
+    image.save()
 
 
 def json_order(order, customer):
@@ -46,3 +48,38 @@ def json_order(order, customer):
             'prepayment': order.prepayment,
             'paymant': order.paymant,
             'hide_order': order.hide_order}
+
+
+def date_frequence(start, end, amount):
+    return (end - start) // amount
+
+
+def get_img(img):
+    return list((img[i], i) for i in range(0, len(img)))
+
+
+def get_the_number_of_reviews(text):
+    return len(re.compile(r"#.*#", re.M).findall(text))
+
+
+def valid_order(order):
+    valid = []
+    amount = order.amount
+    num_rewiews = get_the_number_of_reviews(order.text)
+    len_img = len(get_img(Image_order.objects.all().filter(order=order.id)))
+    executors_len = len(Executor.objects.all())
+
+    if num_rewiews < amount:
+        valid.append({"text_reviews_error": True})
+    else:
+        valid.append({"text_reviews_error": False})
+    if len_img < amount:
+        valid.append({"img_error": True})
+    else:
+        valid.append({"img_error": False})
+    if executors_len < amount:
+        valid.append({"executors_error": True})
+    else:
+        valid.append({"executors_error": False})
+
+    return valid

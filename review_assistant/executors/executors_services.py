@@ -16,4 +16,5 @@ def json_executor(executor):
             "phone": executor.phone,
             "link_to_account": executor.link_to_account,
             "telegram_id": executor.telegram_id,
-            "date_create": executor.date_create.strftime('%Y-%m-%d'), }
+            "date_create": executor.date_create.strftime('%Y-%m-%d'),
+            "gender": executor.gender}

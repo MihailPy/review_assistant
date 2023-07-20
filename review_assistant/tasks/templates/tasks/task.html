@@ -1,0 +1,50 @@
+{% extends "review_assistant/base_generic.html" %}
+{% block content %}
+<div class="card shadow" style="max-width: 800px;">
+    <div class="card-header">
+        <h5 class="card-title">
+            <a href="/task/{{task.id}}">№{{task.id}}</a>
+        </h5>
+    </div>
+    <div class="card-body row">
+        <div class="col p-2 flex-column" style="max-width: 280px;">
+            <img src="{{task.image.img.url}}" class="img-thumbnail rounded float-start m-2" style="max-width: 250px;">
+        </div>
+        <div class="col flex-column" style="min-width: 250px;">
+            <p class="card-text">Исполнитель: <a href="/executor/{{task.executor.id}}">{{task.executor.name}}</a></p>
+            <p class="card-text">Текст отзыва: {{task.text_review}}</p>
+            <p class="card-text">Дата переписки: {{task.correspondence_date}}</p>
+            <p class="card-text">Дата окончания переписки: {{task.date_of_the_completed_correspondence}}</p>
+            <p class="card-text">Дата отзыва: {{task.date_of_withdrawal}}</p>
+            <p class="card-text">Дата написания отзыва: {{task.date_of_writing_the_review}}</p>
+            <div class="form-check m-2">
+              <input class="form-check-input" type="checkbox" value="" {% if task.in_progres == True %} checked {% endif %}  disabled>
+              <label class="form-check-label">
+                  Выполняеться?
+              </label>
+            </div>
+            <div class="form-check m-2">
+              <input class="form-check-input" type="checkbox" value="" {% if task.in_progres == True %} checked {% endif %}  disabled>
+              <label class="form-check-label">
+                  Выполняеться?
+              </label>
+            </div>
+            <div class="form-check m-2">
+              <input class="form-check-input" type="checkbox" value="" {% if task.paymant == True %} checked {% endif %}  disabled>
+              <label class="form-check-label">
+                  Оплачено?
+              </label>
+            </div>
+            <div class="form-check m-2">
+              <input class="form-check-input" type="checkbox" value="" {% if task.hitch == True %} checked {% endif %}  disabled>
+              <label class="form-check-label">
+                  Заминки?
+              </label>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer">
+        <a href="/edit_task/{{task.id}}" class="btn btn-primary">Изменить</a>
+    </div>
+</div>
+{% endblock %}

@@ -12,4 +12,5 @@ class Executor_form(forms.Form):
     link_to_account = forms.URLField(label="Ссылка", widget=forms.TextInput(attrs={'class': 'form-control'}))
     phone = forms.CharField(label="Телефон", widget=forms.TextInput(attrs={'class': 'form-control'}))
     telegram_id = forms.CharField(label="Телеграм id", widget=forms.TextInput(attrs={'class': 'form-control'}))
+    gender = forms.ChoiceField(label="Пол", choices=(("man", "Мужской"),("woman", "Женский")), widget=forms.Select(attrs={'class': 'form-select'}))
     fields = ('name', 'last_name', 'date_create', 'phone', 'link_to_account', "telegram_id")

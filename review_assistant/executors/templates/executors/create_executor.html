@@ -1,10 +1,10 @@
-{% extends "base_generic.html" %}
+{% extends "review_assistant/base_generic.html" %}
 {% block content %}
 <div class="bd-example-snippet bd-code-snippet container">
     <h2 class="display-5">Исполнитель</h2>
-    <form method="post" action="/create_customer/" class="needs-validation" novalidate>
+    <form method="post" action="/create_executor/" class="needs-validation" novalidate>
         {% csrf_token %}
-        <div class="card h-auto" style="max-width: 400px;">
+        <div class="card h-auto shadow" style="max-width: 400px;">
             <div class="card-body mb-3 p-2">
                 <div class="col justify-content-center">
                 {% for f in form %}

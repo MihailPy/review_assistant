@@ -1,0 +1,27 @@
+{% extends "review_assistant/base_generic.html" %}
+{% block content %}
+<div class="card shadow" style="max-width: 400px;">
+    <div class="card-header">
+        <h5 class="card-title">
+            <a href="/task/{{task.id}}">№{{task.id}}</a>
+        </h5>
+    </div>
+    <div class="card-body  mb-3 p-2">
+        <form method="post" action="/edit_task/{{task.id}}" class="needs-validation" enctype="multipart/form-data" novalidate>
+        {% csrf_token %}
+            <div class="col justify-content-center">
+            {% for f in form %}
+                <div class="col-md p-1">
+                <label for="id_{{f.name}}" class="form-label">{{f.label}}</label>
+                {{f}}
+                </div>
+            {% endfor %}
+            <a href="/task/{{task.id}}" class="btn btn-secondary">Закрыть</a>
+            <button type="submit" class="btn btn-primary ">Сохранить</button>
+            </div>
+        </form>
+    </div>
+    <div class="card-footer">
+    </div>
+</div>
+{% endblock %}

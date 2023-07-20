@@ -20,7 +20,6 @@ def executors_page(request):
     return render(request, 'executors/executors.html', context={'executors': executors, })
 
 
-
 def create_executor_page(request):
     try:
         if request.method == "POST":

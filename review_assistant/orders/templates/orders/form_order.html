@@ -1,0 +1,83 @@
+{% block content %}
+<div style="max-width: 700px;">
+    <div class="row">
+        <div class="col-md-3 p-1">
+            <label class="form-label">Заказчик</label>
+            <label class="form-control"><a href="/customer/{{customer.id}}">№{{customer.id}}: {{customer.name}}</a></label>
+        </div>
+        <div class="col-md-3 p-1">
+            <label class="form-label">Номер телефона</label>
+            <label class="form-control">{{customer.phone}}</label>
+        </div>
+    </div>
+    <div class="row align-items-end">
+        <div class="col-md-2 p-1">
+            <label class="form-label">{{form.amount.label }}</label><br>
+            {{form.amount }}
+        </div>
+
+        <div class="col-md-2 p-1">
+            <label class="form-label">{{form.gender_man.label}}</label>
+            {{form.gender_man}}
+        </div>
+        <div class="col-md-2 p-1">
+            <label class="form-label">{{form.gender_woman.label}}</label>
+            {{form.gender_woman}}
+        </div>
+    </div>
+    <div class="row align-items-center">
+        <div class="col-md-6 p-1">
+            <label class="form-label">{{form.link_to_account.label}}</label>
+            {{form.link_to_account}}
+        </div>
+    </div>
+    <div class="row align-items-center">
+        <div class="col-md-6 p-1">
+            <label class="form-label">{{form.date_order_start.label}}</label>
+            {{form.date_order_start}}
+        </div>
+    </div>
+    <div class="row align-items-center">
+        <div class="col-md-6 p-1">
+            <label class="form-label">{{form.date_order_end.label}}</label>
+            {{form.date_order_end}}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 p-1">
+            <label class="form-label">{{form.text.label}}</label><br>
+             <div class="alert alert-info " role="alert">
+                 Записывайте через символ '#'
+                 <button type="button" class="btn-close position-absolute top-50 end-0 translate-middle-y p-3" data-bs-dismiss="alert" aria-label="Close"></button>
+             </div>
+            {{form.text}}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 p-1">
+            <label class="form-label">{{form.notes.label}}</label>
+            {{form.notes}}
+        </div>
+    </div>
+    <div class="row align-items-end">
+        <div class="col-md-3 p-1">
+            <label class="form-label">{{form.prepayment.label}}</label>
+            {{form.prepayment}}
+        </div>
+        <div class="col-md-2 p-1">
+            <label class="form-label">{{form.paymant.label}}</label>
+            {{form.paymant}}
+        </div>
+        <div class="col-md-2 p-1">
+            <label class="form-label">{{form.hide_order.label}}</label>
+            {{form.hide_order}}
+        </div>
+    </div>
+    <div class="row g-5">
+        <div class="col-4 p-1">
+            <a href="/order/{{order.id}}" class="btn btn-secondary">Закрыть</a>
+            <button type="submit" class="btn btn-primary ">Сохранить</button>
+        </div>
+    </div>
+</div>
+{% endblock %}

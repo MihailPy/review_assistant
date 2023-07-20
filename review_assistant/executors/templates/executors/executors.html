@@ -1,4 +1,4 @@
-{% extends "base_generic.html" %}
+{% extends "review_assistant/base_generic.html" %}
 {% block content %}
 <div class="container">
     <h2 class="display-5">Исполнители</h2>
@@ -8,8 +8,8 @@
     {% if executors.count > 0 %}
         <div class="row row-cols-auto">
             {% for executor in executors %}
-                <div class="">
-                    <div class="card h-auto" style="width: 250px;">
+                <div class="m-2">
+                    <div class="card h-auto shadow" style="width: 250px;">
                         <div class="card-header">
                             <h5 class="card-title">
                                 <a href="/executor/{{executor.id}}"> №{{executor.id}} {{executor.name}}</a></h5>
@@ -21,8 +21,8 @@
                             <p class="card-text">Телеграм id:{{executor.telegram_id}}</p>
                         </div>
                         <div class="card-footer btn-group">
-                                <a type="button" href="/edit_executor/{{executor.id}}" class="btn btn-primary">Изменить</a>
-                                <a type="button" href="/delete_executor/{{executor.id}}" class="btn btn-danger">Удалить</a>
+                                <a type="button" href="/edit_executor/{{executor.id}}" class="btn btn-primary btn-sm">Изменить</a>
+                                <a type="button" href="/delete_executor/{{executor.id}}" class="btn btn-danger btn-sm">Удалить</a>
                         </div>
                     </div>
                 </div>

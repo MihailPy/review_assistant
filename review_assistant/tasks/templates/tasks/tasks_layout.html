@@ -1,0 +1,45 @@
+{% block content %}
+<table class="table table-hover table-sm table-bordered">
+    <thead>
+        <tr>
+            <th scope="col">Задача</th>
+            <th scope="col">Исполнитель</th>
+            <th scope="col" style="min-width: 150px;">Дата начала переписки</th>
+            <th scope="col" style="min-width: 150px;">Дата начала отзыва</th>
+            <th scope="col">Скриншот</th>
+            <th scope="col">Выполненно?</th>
+            <th scope="col">Оплата?</th>
+            <th scope="col">Ошибка?</th>
+            <th scope="col">Кнопки</th>
+        </tr>
+    </thead>
+    <tbody class="table-group-divider">
+    {% for task in tasks %}
+        <tr class="{% if task.hitch == True and task.execution_or_no == False %}table-danger{% elif task.in_progres == True and task.execution_or_no == False %}table-primary{% elif task.date_of_the_completed_correspondence != None and task.execution_or_no == False %}table-warning{% elif task.date_of_writing_the_review != None and task.execution_or_no == False %}table-warning{% else %}{% endif %}">
+            <th scope="row"><a href="/task/{{task.id}}">{{task.id}}</a></th>
+<!--                                <td><a href="/order/{{task.order_id}}">{{tesk.order_id.id}}</a></td>-->
+            <td><a href="/executor/{{task.executor_id.id}}"> {{task.executor_id.name}}</a></td>
+            <td>{{task.correspondence_date.date}}</td>
+            <td>
+                {{task.date_of_withdrawal.date}}
+            </td>
+            <td>
+                <a href="{{task.image.url}}" class="card-link">Скриншот отзыва</a>
+            </td>
+            <td>
+                <input type="checkbox" class="form-check-input" {% if task.execution_or_no == True %} checked {% endif %} disabled>
+            </td>
+            <td>
+                <input type="checkbox" class="form-check-input" {% if task.paymant == True %} checked {% endif %} disabled>
+            </td>
+            <td>
+                <input type="checkbox" class="form-check-input" {% if task.hitch == True %} checked {% endif %} disabled>
+            </td>
+            <td>
+                <a type="button" href="/edit_task/{{task.id}}" class="btn btn-primary btn-sm">Изменить</a>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,7 +1,8 @@
 from django.db import models
 
+
 class Order(models.Model):
-    customer_id = models.IntegerField(help_text="Выберете закзчика", verbose_name="Заказчик", )
+    customer = models.ForeignKey("customers.Customer", on_delete=models.PROTECT, verbose_name="Заказчик", blank=False, default="")
     date_order_start = models.DateField(help_text="Дата заказа", verbose_name="Дата заказа", null=True)
     date_order_end = models.DateField(help_text="Дата заказа", verbose_name="Дата заказа", null=True)
     amount = models.IntegerField(help_text="Введите количество отзывов", verbose_name="Количество отзывов", null=True)
@@ -20,6 +21,6 @@ class Order(models.Model):
 
 
 class Image_order(models.Model):
-    order = models.ForeignKey("Order", verbose_name="Заказ", null=True, blank=True, on_delete=models.PROTECT)
+    order = models.ForeignKey(Order, verbose_name="Заказ", null=True, blank=True, on_delete=models.PROTECT)
     img = models.ImageField(help_text="Скриншот обявления", verbose_name="Скриншот обявления", null=True,
                             upload_to="images/%Y/%m/%d")
