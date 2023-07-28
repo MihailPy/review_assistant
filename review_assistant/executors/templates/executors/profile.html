@@ -1,0 +1,27 @@
+{% extends "review_assistant/base_generic.html" %}
+{% block content %}
+<div class="bd-example-snippet bd-code-snippet container">
+    <h2 class="display-5"></h2>
+    <div class="card mb-3 h-auto shadow" style="max-width: 400px;">
+        <div class="card-header">
+            <h5 class="card-title">
+                <a href="{% url 'executor' executor.id %}"> №{{executor.id}} {{executor.name}}</a></h5>
+        </div>
+        <div class="card-body mb-3 p-2">
+            <p class="card-title">Имя: {{user.first_name}}</p>
+            <p class="card-title">Фамилия: {{executor.last_name}}</p>
+            <p class="card-title">Username: {{user.username}}</p>
+            <p class="card-title">Почта: {{user.email}}</p>
+            <p><a href="tel:+{{executor.phone}}" class="card-link">Телефон: {{executor.phone}}</a></p>
+            <p class="card-text">Номер карты: {{executor.card_number}}</p>
+            <p class="card-text">Баланс: {{executor.balance}}</p>
+            <p class="card-text">Дата создания аккаунта: {{executor.date_create}}</p>
+            <p><a href="{{executor.link_to_account}}" class="card-link">Ссылка на аккаунт</a></p>
+            <p class="card-text">Пол: {{executor.gender}}</p>
+        </div>
+        <div class="card-footer btn-group">
+                <a type="button" href="{% url 'edit_profile' %}" class="btn btn-primary">Изменить</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

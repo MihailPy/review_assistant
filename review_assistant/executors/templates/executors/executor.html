@@ -5,20 +5,23 @@
     <div class="card mb-3 h-auto shadow" style="max-width: 400px;">
         <div class="card-header">
             <h5 class="card-title">
-                <a href="/executor/{{executor.id}}"> №{{executor.id}} {{executor.name}}</a></h5>
+                <a href="{% url 'executor' executor.id %}"> №{{executor.id}} {{executor.name}}</a></h5>
         </div>
         <div class="card-body mb-3 p-2">
             <p class="card-title">Исполнитель: {{executor.name}} {{executor.last_name}}</p>
-            <a href="{{executor.link_to_account}}" class="card-link">Ссылка на аккаунт</a><br>
-            <a href="tel:+{{executor.phone}}" class="card-link">{{executor.phone}}</a><br>
-            <p class="card-text">Телеграм id:{{executor.telegram_id}}</p>
+            <p>
+                Номер телефона: <a href="tel:+{{executor.phone}}" class="card-link">{{executor.phone}}</a><br>
+            </p>
+            <p>
+                <a href="{{executor.link_to_account}}" class="card-link">Ссылка на аккаунт</a><br>
+            </p>
             <p class="card-text">Дата создания аккаунта: {{executor.date_create}}</p>
             <p class="card-text">Пол: {{executor.gender}}</p>
+            <p class="card-text">Номер карты: {{executor.card_number}}</p>
+            <p class="card-text">Баланс: {{executor.balance}}</p>
         </div>
         <div class="card-footer btn-group">
-                <a type="button" href="/edit_executor/{{executor.id}}" class="btn btn-primary">Изменить</a>
-                <a type="button" href="/delete_executor/{{executor.id}}" class="btn btn-danger">Удалить</a>
+                <a type="button" href="{% url 'delete_executor' executor.id %}" class="btn btn-danger">Удалить</a>
         </div>
 </div>
 {% endblock %}
-

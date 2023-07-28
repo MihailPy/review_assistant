@@ -2,9 +2,15 @@
 {% block content %}
 <div class="bd-example-snippet bd-code-snippet container">
     <h2>Форма изменения заказа</h2>
-    <form method="post" action="/edit_order/{{order.id}}" class="needs-validation" enctype="multipart/form-data" novalidate>
+    <form method="post" action="{% url 'edit_order' order.id %}" class="needs-validation" enctype="multipart/form-data" novalidate>
         {% csrf_token %}
         {% include "orders/form_order.html" %}
+        <div class="row g-5">
+            <div class="col-4 p-1">
+                <a href="{% url 'order' order.id %}" class="btn btn-secondary my-1">Закрыть</a>
+                <button type="submit" class="btn btn-primary ">Сохранить</button>
+            </div>
+        </div>
     </form>
 </div>
 <script>

@@ -2,11 +2,12 @@
 {% block content %}
 <div class="bd-example-snippet bd-code-snippet container">
     <h2 class="display-5">Заказчик</h2>
-    <form method="post" action="/create_customer/" class="needs-validation" novalidate>
+    <form method="post" action="{% url 'create_customer' %}" class="needs-validation" novalidate>
         {% csrf_token %}
         <div class="card h-auto shadow" style="max-width: 400px;">
             <div class="card-body mb-3 p-2">
                 <div class="col justify-content-center">
+                <p class="text-danger">{{errors}}</p>
                 {% for f in form %}
                     <div class="col-md p-1">
                     <label for="id_{{f.name}}" class="form-label">{{f.label}}</label>
@@ -16,7 +17,7 @@
                 </div>
             </div>
             <div class="card-footer">
-                <a type="button" href="/customers" class="btn btn-secondary">Закрыть</a>
+                <a type="button" href="{% url 'customers' %}" class="btn btn-secondary">Закрыть</a>
                 <button type="submit" class="btn btn-primary">Сохранить</button>
             </div>
         </div>

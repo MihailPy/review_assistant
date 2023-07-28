@@ -2,8 +2,10 @@ import re
 from datetime import date, timedelta, datetime
 import random
 
+from django.conf import settings
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 
 from .forms import OrderForms, PhotoForms
@@ -17,6 +19,7 @@ from tasks.models import Tasks
 from tasks.tasks_services import task_status
 
 
+@login_required
 def orders_page(request):
     orders = Order.objects.all()
     tasks = Tasks.objects.all()
@@ -24,13 +27,14 @@ def orders_page(request):
     return render(request, 'orders/orders.html', context={'orders': orders, 'tasks': tasks, })
 
 
+@login_required
 def create_order_page(request, id):
     orders = Order.objects.all()
     customer = Customer.objects.get(id=id)
     if request.method == "POST":
         form = OrderForms(request.POST)
         order = save_order(request, Order(), customer)
-        return HttpResponseRedirect("/order/" + str(order.id))
+        return redirect("order", order.id)
     else:
         form = OrderForms()
         return render(request, 'orders/create_order.html', context={'id': id,
@@ -39,13 +43,14 @@ def create_order_page(request, id):
                                                                     'customer': customer, })
 
 
+@login_required
 def edit_order_page(request, id):
     order = Order.objects.get(id=id)
     customer = order.customer
     if request.method == "POST":
         form = OrderForms(request.POST)
         order = save_order(request, order, customer)
-        return HttpResponseRedirect("/order/" + str(order.id))
+        return redirect("order", order.id)
     else:
         form = OrderForms(json_order(order, customer))
         return render(request, 'orders/edit_order.html', context={'id': id,
@@ -54,6 +59,7 @@ def edit_order_page(request, id):
                                                                   'customer': customer, })
 
 
+@login_required
 def order_page(request, id):
     order = Order.objects.get(id=id)
     frequence = date_frequence(order.date_order_start, order.date_order_end, order.amount)
@@ -69,67 +75,80 @@ def order_page(request, id):
                            'tasks': tasks, 'executors': executors, 'valid': valid, })
 
 
+@login_required
 def edit_img(request, id):
     if request.method == "POST":
         form = PhotoForms(request.POST, request.FILES)
         if form.is_valid():
             order = Order.objects.get(id=id)
             save_images(request.FILES.get("photo"), order)
-        return HttpResponseRedirect("/edit_img/" + str(id))
+        return redirect("edit_img", id)
     else:
         form = PhotoForms()
         img = get_img(Image_order.objects.all().filter(order=id))
         return render(request, 'orders/edit_image.html', context={'form': form, 'id': id, 'img': img})
 
 
+@login_required
 def delete_img(request, id):
     img = Image_order.objects.get(id=id)
     order_id = img.order.id
     img.delete()
-    return HttpResponseRedirect("/edit_img/" + str(order_id))
+    return redirect("edit_img", order_id)
 
 
+@login_required
 def divide_into_tasks(request, id):
     order = Order.objects.get(id=id)
-    if len(Tasks.objects.all().filter(order=id)) != 0:
-        executors = Executor.objects.all()
-        date_start = order.date_order_start
-        date_end = order.date_order_end
-        p = re.compile(r"#.*#", re.M)
-        images = get_img(Image_order.objects.all().filter(order=id))
+    valid = valid_order(order)
+    v = []
+    for i in valid:
+        if list(i.values())[0]:
+            v.append(True)
+    print(not len(Tasks.objects.all().filter(order=id)), not len(v))
+    if not len(Tasks.objects.all().filter(order=id)) and not len(v):
+        try:
+            executors = Executor.objects.all()
+            executors_list = []
+            for executor in executors:
+                te = Tasks.objects.filter(executor=executor)
+                if len(te):
+                    te = sorted(te, key=lambda i: i.correspondence_date)
+                    if date.today()-timedelta(days=7) > te[0].date_of_withdrawal.date():
+                        executors_list.append(executor)
+            date_start = order.date_order_start
+            date_end = order.date_order_end
+            images = get_img(Image_order.objects.all().filter(order=id))
 
-        task_texts = p.findall(order.text)
-        print(task_texts)
-        print(order.date_order_start, order.date_order_end)
-        frequence = date_frequence(order.date_order_start, order.date_order_end, order.amount)
-        for i in range(0, order.amount):
-            task = Tasks()
-            task.order = order
-            task.image = images[i][0]
-            task.executor = executors[i]
-            task.text_review = task_texts[i]
-            print(Tasks.objects.all().filter(executor=executors[i]))
-            if len(Tasks.objects.all().filter(executor=executors[i])) != 0:
-                t = Tasks.objects.all().filter(executor=executors[i])
-                ta = (t[0].date_of_withdrawal+timedelta(days=7)).date()
-                print(date_start)
-                print(date_start > ta)
-            task.correspondence_date = date_start
-            task.date_of_withdrawal = date_start + timedelta(random.randint(1, 2))
-            task.hitch = False
-            task.in_progres = False
-            task.execution_or_no = False
-            task.paymant = False
-            date_start += timedelta(random.randint(1, 3))
-            if date_start > date_end:
-                date_start = order.date_order_start
-            if task.date_of_withdrawal > date_end:
-                task.date_of_withdrawal = date_end
-            # task.save()
-    return HttpResponseRedirect("/order/" + str(order.id))
+            task_texts = re.split(r"[#]\s*", order.text)
+            # print(task_texts)
+            # print(order.date_order_start, order.date_order_end)
+            frequence = date_frequence(order.date_order_start, order.date_order_end, order.amount)
+            for i in range(0, order.amount):
+                task = Tasks()
+                task.order = order
+                task.image = images[i][0]
+                task.executor = executors[i]
+                task.text_review = task_texts[i]
+                # print(Tasks.objects.all().filter(executor=executors[i]))
+                if len(Tasks.objects.all().filter(executor=executors[i])) != 0:
+                    t = Tasks.objects.all().filter(executor=executors[i])
+                    ta = (t[0].date_of_withdrawal + timedelta(days=7)).date()
+                    # print(date_start)
+                    # print(date_start > ta)
+                task.correspondence_date = date_start
+                task.date_of_withdrawal = date_start + timedelta(random.randint(1, 2))
+                task.hitch = False
+                task.in_progres = False
+                task.execution_or_no = False
+                task.paymant = False
+                date_start += timedelta(random.randint(1, 3))
+                if date_start > date_end:
+                    date_start = order.date_order_start
+                if task.date_of_withdrawal > date_end:
+                    task.date_of_withdrawal = date_end
+                # task.save()
+        except Exception as error:
+            print(error)
 
-
-class ServiceWorkerView(TemplateView):
-    template_name = 'sw.js'
-    content_type = 'application/javascript'
-    name = 'sw.js'
+    return redirect("order", order.id)

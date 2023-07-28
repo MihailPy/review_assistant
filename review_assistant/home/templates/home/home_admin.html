@@ -1,0 +1,38 @@
+{% extends "review_assistant/base_generic.html" %}
+{% block content %}
+{% if  user.is_staff %}
+    <form id="send-push__form">
+        <h3 class="header">Send a push notification</h3>
+        <p class="error"></p>
+        <input type="text" name="head" placeholder="Header: Your favorite airline 😍">
+        <textarea name="body" id="" cols="30" rows="10" placeholder="Body: Your flight has been cancelled 😱😱😱"></textarea>
+        <button>Send Me</button>
+    </form>
+    <input class="btn" type="button" onclick="notifSet ()" value="Notify">
+<script>
+    function notifyMe () {
+        var notification = new Notification ("Header header", {
+            body: "body body",
+            icon: "http://127.0.0.1:8000/static/icons/minion.jpg"
+        });
+    };
+    function notifSet () {
+        if (!("Notification" in window)){
+            alert("Ваш браузер не поддерживает уведомления");
+            }
+        else if (Notification.permission === "granted"){
+            setTimeout(notifyMe, 2000);
+            }
+        else if (Notification.permission !== "denied") {
+            Notification.requestPermission (function (permission){
+                if (!('permission' in Notification))
+                    Notification.permission = permission;
+                if (permission == "granted")
+                    alert("2000");
+                    setTimeout(notifyMe, 2000);
+            });
+        }
+    }
+</script>
+{% endif %}
+{% endblock %}

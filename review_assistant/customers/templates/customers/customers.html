@@ -3,7 +3,7 @@
 <div class="container">
     <h2 class="display-5">Заказчики</h2>
     <div class="mb-3">
-        <a type="button" href="/create_customer/" class="btn btn-primary">Добавить заказчика</a>
+        <a type="button" href="{% url 'create_customer' %}" class="btn btn-primary">Добавить заказчика</a>
     </div>
     {% if customers.count > 0 %}
         <div class="row row-cols-auto">
@@ -12,7 +12,7 @@
                 <div class="card h-auto shadow" style="max-width: 400px;">
                     <div class="card-header">
                         <h5 class="card_title">
-                            <a href="/customer/{{customer.id}}">№{{customer.id}} {{customer.name}}</a>
+                            <a href="{% url 'customer' customer.id %}">№{{customer.id}} {{customer.name}}</a>
                         </h5>
                     </div>
                     <div class="card-body mb-3 p-2">
@@ -20,11 +20,11 @@
                         <a href="tel:{{customer.phone}}" class="card-link">Телефон {{customer.phone}}</a><br>
                         <a href="{{customer.tg_un}}" class="card-link">Телеграм</a><br>
                         <p class="card-text">{{customer.notes}}</p>
-                        <div class="py-2"> <a type="button" class="btn btn-success" href="/create_order/{{customer.id}}" >Добавить заказ</a></div>
+                        <div class="py-2"> <a type="button" class="btn btn-success" href="{% url 'create_order' customer.id %}" >Добавить заказ</a></div>
                     </div>
                     <div class="card-footer btn-group">
-                        <a type="button" href="/edit_customer/{{customer.id}}" class="btn btn-primary btn-sm">Изменить</a>
-                        <a type="button" href="/delete_customer/{{customer.id}}" class="btn btn-danger btn-sm">Удалить</a>
+                        <a type="button" href="{% url 'edit_customer' customer.id %}" class="btn btn-primary btn-sm">Изменить</a>
+                        <a type="button" href="{% url 'delete_customer' customer.id %}" class="btn btn-danger btn-sm">Удалить</a>
                     </div>
                 </div>
             </div>

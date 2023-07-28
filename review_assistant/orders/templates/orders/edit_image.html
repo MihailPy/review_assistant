@@ -1,6 +1,6 @@
 {% extends "review_assistant/base_generic.html" %}
 {% block content %}
-<form method="post" action="/edit_img/{{id}}" enctype="multipart/form-data">
+<form method="post" action="{% url 'edit_img' id %}" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="col-12 col-sm-10 p-1">
             <label class="form-label">{{form.photo.label}}</label>

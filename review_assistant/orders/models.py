@@ -24,3 +24,4 @@ class Image_order(models.Model):
     order = models.ForeignKey(Order, verbose_name="Заказ", null=True, blank=True, on_delete=models.PROTECT)
     img = models.ImageField(help_text="Скриншот обявления", verbose_name="Скриншот обявления", null=True,
                             upload_to="images/%Y/%m/%d")
+

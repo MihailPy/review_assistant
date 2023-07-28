@@ -1,0 +1,23 @@
+{% extends "review_assistant/base_generic.html" %}
+{% block content %}
+<div class="text-center">
+  <main class="form-signin w-100 m-auto" style="width: 100%!important;max-width: 330px;padding: 15px;margin: auto!important;">
+    <form method="post" action="{% url 'login' %}">{% csrf_token %}
+      <h1 class="h3 mb-3 fw-normal">Пожалуйста войдите</h1>
+      <div class="form-floating my-1">
+        <input type="text" name="username" class="form-control" autocapitalize="none" autocomplete="username"
+               maxlength="150" required="" id="id_username" placeholder="username">
+        <label for="id_username">Имя пользователя</label>
+      </div>
+      <div class="form-floating my-2">
+        <input type="password" name="password" class="form-control" id="id_password" autocomplete="current-password"
+               required="" placeholder="Password">
+        <label for="id_password">Пароль</label>
+      </div>
+      <button class="w-100 btn btn-lg btn-primary my-3" type="submit">Войти</button>
+    </form>
+      <p class="link"><a href="{% url 'register' %}">Зарегистрироваться как исполнитель</a></p>
+  </main>
+</main>
+</div>
+{% endblock %}

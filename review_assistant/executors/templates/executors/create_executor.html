@@ -1,8 +1,9 @@
 {% extends "review_assistant/base_generic.html" %}
 {% block content %}
 <div class="bd-example-snippet bd-code-snippet container">
-    <h2 class="display-5">Исполнитель</h2>
-    <form method="post" action="/create_executor/" class="needs-validation" novalidate>
+    <main class="form-signin w-100 m-auto" style="width: 100%!important;max-width: 400px;padding: 15px;margin: auto!important;">
+    <h2 class="display-5">Регистрация</h2>
+    <form method="post" action="{% url 'create_executor' %}" class="needs-validation" novalidate>
         {% csrf_token %}
         <div class="card h-auto shadow" style="max-width: 400px;">
             <div class="card-body mb-3 p-2">
@@ -16,12 +17,12 @@
                 </div>
             </div>
             <div class="card-footer">
-                <a type="button" href="/customers" class="btn btn-secondary">Закрыть</a>
-                <button type="submit" class="btn btn-primary">Сохранить</button>
+                <button class="w-100 btn btn-lg btn-primary my-1" type="submit">Зарегистрироваться</button>
             </div>
         </div>
     </form>
-
+    </main>
+    {% load static %}
     <script>
         // Example starter JavaScript for disabling form submissions if there are invalid fields
     (() => {

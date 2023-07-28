@@ -35,27 +35,33 @@
                         {% for v in valid %}
                             {% if v.text_reviews_error %}
                             <div class="alert alert-warning w-75" role="alert">
-                            Количество текстов для отзывов меньше чем заданое число отзывов
-                             <button type="button" class="btn-close position-absolute top-50 end-0 translate-middle-y p-3" data-bs-dismiss="alert" aria-label="Close"></button>
+                                <p class="text-break w-75">
+                                    Количество текстов для отзывов меньше чем заданное число отзывов
+                                </p>
+                                <button type="button" class="btn-close position-absolute top-50 end-0 translate-middle-y p-3" data-bs-dismiss="alert" aria-label="Close"></button>
                             </div>
                             {% elif v.img_error %}
                             <div class="alert alert-warning w-75" role="alert">
-                            Количество скриншотов не совпадает с числом отзывов
-                             <button type="button" class="btn-close position-absolute top-50 end-0 translate-middle-y p-3" data-bs-dismiss="alert" aria-label="Close"></button>
+                                <p class="text-break w-75">
+                                    Количество скриншотов не совпадает с числом отзывов
+                                </p>
+                                <button type="button" class="btn-close position-absolute top-50 end-0 translate-middle-y p-3" data-bs-dismiss="alert" aria-label="Close"></button>
                             </div>
                             {% elif v.executors_error %}
                             <div class="alert alert-warning w-75" role="alert">
-                            У вас нехватает исполнителей
-                             <button type="button" class="btn-close position-absolute top-50 end-0 translate-middle-y p-3" data-bs-dismiss="alert" aria-label="Close"></button>
+                                <p class="text-break w-75">
+                                    У вас нехватает исполнителей
+                                </p>
+                                <button type="button" class="btn-close position-absolute top-50 end-0 translate-middle-y p-3" data-bs-dismiss="alert" aria-label="Close"></button>
                             </div>
                             {% endif %}
                         {% endfor %}
                     </div>
                 </div>
                 <div class="card-footer mt-auto w-100">
-                    <a type="button" class="btn btn-outline-success" href="/edit_order/{{order.id}}" style="margin-bottom:5px">Изменить</a>
-                    <a type="button" class="btn btn-secondary" href="/divide_into_tasks/{{order.id}}" style="margin-bottom:5px">Разделить на задачи</a>
-                    <a type="button" class="btn btn-primary" href="/edit_img/{{order.id}}" style="margin-bottom:5px">Добавить скриншот</a>
+                    <a type="button" class="btn btn-outline-success" href="{% url 'edit_order' order.id %}" style="margin-bottom:5px">Изменить</a>
+                    <a type="button" class="btn btn-secondary" href="{% url 'divide_into_tasks' order.id %}" style="margin-bottom:5px">Разделить на задачи</a>
+                    <a type="button" class="btn btn-primary" href="{% url 'edit_img' order.id %}" style="margin-bottom:5px">Добавить скриншот</a>
                 </div>
             </div>
         </div>

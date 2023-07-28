@@ -59,7 +59,7 @@ def get_img(img):
 
 
 def get_the_number_of_reviews(text):
-    return len(re.compile(r"#.*#", re.M).findall(text))
+    return len(re.split(r"[#]\s*", text))
 
 
 def valid_order(order):

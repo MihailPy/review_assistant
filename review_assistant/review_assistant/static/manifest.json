@@ -1,22 +1,22 @@
 {
     "name": "Review assistant",
     "short_name": "review_assistant",
-    "start_url": "/orders",
+    "start_url": "/home_page/",
     "scope": ".",
     "display": "standalone",
     "background_color": "#FFF",
-    "theme_color": "#493174",
+    "theme_color": "#FFF",
     "description": "Test app for Django and PWA",
     "dir": "ltr",
     "lang": "ru-RU",
     "orientation": "portrait-primary",
     "icons": [{
         "src": "/static/icons/minion96x96.jpg",
-        "type": "image/png",
+        "type": "image/jpg",
         "sizes": "96x96"
     }, {
         "src": "/static/icons/minion.jpg",
-        "type": "image/png",
+        "type": "image/jpg",
         "sizes": "640x640"
     }]
 }

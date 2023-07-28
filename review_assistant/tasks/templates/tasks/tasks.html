@@ -16,7 +16,7 @@
                         <div class="row">
                             <div class="col-md-3">
                                 <label class="form-label">Заказчик</label><br>
-                                <a href="/customer/{{order.customer.id}}">№{{order.customer.id}} {{order.customer.name}}</a>
+                                <a href="{% url 'customer' order.customer.id %}">№{{order.customer.id}} {{order.customer.name}}</a>
                             </div>
                             <div class="col-md-3">
                                 <label class="form-label">Телефон заказчика</label>

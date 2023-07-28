@@ -13,11 +13,12 @@
             <a href="tel:{{customer.phone}}" class="card-link">Телефон {{customer.phone}}</a><br>
             <a href="{{customer.tg_un}}" class="card-link">Телеграм</a><br>
             <p class="card-text">{{customer.notes}}</p>
-            <div class="py-2"> <a type="button" class="btn btn-success" href="/create_order/{{customer.id}}" >Добавить заказ</a></div>
+            <div class="py-2"> <a type="button" class="btn btn-success" href="{% url 'create_order' customer.id %}" >Добавить заказ</a></div>
         </div>
         <div class="card-footer">
-            <a type="button" href="/edit_customer/{{customer.id}}" class="btn btn-primary">Изменить</a>
-            <a type="button" href="/delete_customer/{{customer.id}}" class="btn btn-danger">Удалить</a>
+            <a type="button" href="{% url 'customers' %}" class="btn btn-secondary">Закрыть</a>
+            <a type="button" href="{% url 'edit_customer' customer.id %}" class="btn btn-primary">Изменить</a>
+            <a type="button" href="{% url 'delete_customer' customer.id %}" class="btn btn-danger">Удалить</a>
         </div>
     </div>
 </div>

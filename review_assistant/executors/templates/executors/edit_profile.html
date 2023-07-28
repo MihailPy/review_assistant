@@ -1,8 +1,8 @@
 {% extends "review_assistant/base_generic.html" %}
 {% block content %}
 <div class="bd-example-snippet bd-code-snippet container">
-    <h2 class="display-5">Заказчик</h2>
-    <form method="post" action="{% url 'edit_customer' customer.id %}" class="needs-validation" novalidate>
+    <h2 class="display-5">Профиль</h2>
+    <form method="post" action="{% url 'edit_profile' %}" class="needs-validation" novalidate>
         {% csrf_token %}
         <div class="card h-auto shadow" style="max-width: 400px;">
             <div class="card-body mb-3 p-2">
@@ -16,7 +16,7 @@
                 </div>
             </div>
             <div class="card-footer">
-                <a type="button" href="{% url 'customers' %}" class="btn btn-secondary">Закрыть</a>
+                <a type="button" href="{% url 'profile' %}" class="btn btn-secondary">Закрыть</a>
                 <button type="submit" class="btn btn-primary">Сохранить</button>
             </div>
         </div>
