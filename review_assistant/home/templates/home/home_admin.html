@@ -1,5 +1,6 @@
 {% extends "review_assistant/base_generic.html" %}
 {% block content %}
+ Home tab's
 {% if  user.is_staff %}
     <form id="send-push__form">
         <h3 class="header">Send a push notification</h3>
@@ -8,7 +9,74 @@
         <textarea name="body" id="" cols="30" rows="10" placeholder="Body: Your flight has been cancelled 😱😱😱"></textarea>
         <button>Send Me</button>
     </form>
-    <input class="btn" type="button" onclick="notifSet ()" value="Notify">
+    <div class="bd-example">
+        <nav>
+          <div class="nav nav-tabs mb-3" id="nav-tab" role="tablist">
+            <button class="nav-link" id="nav-yesterday-tab" data-bs-toggle="tab" data-bs-target="#nav-yesterday" type="button" role="tab" aria-controls="nav-yesterday" aria-selected="true">Вчера</button>
+            <button class="nav-link active" id="nav-today-tab" data-bs-toggle="tab" data-bs-target="#nav-today" type="button" role="tab" aria-controls="nav-today" aria-selected="false" tabindex="-1">Сегодня</button>
+            <button class="nav-link" id="nav-tomorrow-tab" data-bs-toggle="tab" data-bs-target="#nav-tomorrow" type="button" role="tab" aria-controls="nav-tomorrow" aria-selected="false" tabindex="-1">Завтра</button>
+          </div>
+        </nav>
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade " id="nav-yesterday" role="tabpanel" aria-labelledby="nav-home-tab">
+                {% if yesterday %}
+                      {% for task in yesterday %}
+                          <div class="m-1">
+                              {% include "tasks/task_layout.html" %}
+                          </div>
+                      {% endfor %}
+                  {% endif %}
+            </div>
+            <div class="tab-pane fade active show" id="nav-today" role="tabpanel" aria-labelledby="nav-profile-tab">
+              <div class="row row-cols-auto">
+                  {% if today %}
+                      {% for task in today %}
+                          <div class="m-1">
+                              {% include "tasks/task_layout.html" %}
+                          </div>
+                      {% endfor %}
+                  {% endif %}
+              </div>
+            </div>
+            <div class="tab-pane fade" id="nav-tomorrow" role="tabpanel" aria-labelledby="nav-contact-tab">
+                {% if tomorrow %}
+                    {% for task in tomorrow %}
+                        <div class="m-1">
+                            {% include "tasks/task_layout.html" %}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+<script>
+    document.addEventListener('swiped-up', function(e) {
+        console.log('swiped-up'); // the element that was swiped
+    });
+    document.addEventListener('swiped-down', function(e) {
+        console.log('swiped-down'); // the element that was swiped
+    });
+</script>
+<script>
+    function getUpdate(){
+    $.ajax({
+        url: '/',         /* Куда отправить запрос */
+        method: 'get',             /* Метод запроса (post или get) */
+        dataType: 'html',          /* Тип данных в ответе (xml, json, script, html). */
+        data: {text: ''},     /* Данные передаваемые в массиве */
+        success: function(data){   /* функция которая будет выполнена после успешного запроса.  */
+
+             $('#nav-yesterday').html($(data).find('#nav-yesterday').html());
+             $('#nav-today').html($(data).find('#nav-today').html());
+             $('#nav-tomorrow').html($(data).find('#nav-tomorrow').html());
+
+             console.log($(data).find('#update'));
+             console.log($('#update').length);
+              /* В переменной data содержится ответ от index.php. */
+        }
+    });}
+    window.setInterval('getUpdate()', 5000);
+</script>
 <script>
     function notifyMe () {
         var notification = new Notification ("Header header", {

@@ -27,3 +27,11 @@ class Accounting_for_completed_and_failed_tasks(models.Model):
     date_of_writing_the_review = models.DateTimeField(verbose_name="Дата выполнения отзыва", null=True)
     execution_or_no = models.BooleanField(help_text="Выберете если исполнено", verbose_name="Исполнено", default=False)
     paymant = models.BooleanField(help_text="Выберете если оплачено", verbose_name="Оплата", null=True)
+
+
+class Image_user(models.Model):
+    task = models.ForeignKey(Tasks, verbose_name="Заказ", null=True, blank=True, on_delete=models.PROTECT)
+    img = models.ImageField(help_text="Скриншот обявления", verbose_name="Скриншот обявления", null=True,
+                            upload_to="images/%Y/%m/%d")
+    executor = models.ForeignKey("executors.Executor", on_delete=models.PROTECT, verbose_name="Исполнитель",
+                                 blank=False)

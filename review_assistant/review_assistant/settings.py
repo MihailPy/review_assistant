@@ -31,9 +31,9 @@ SECRET_KEY = 'django-insecure-osb3v70gwf%gscgz6&*%e5e!sn6503nx50pime)g&*r%&z5!3%
 DEBUG = True
 
 if DEBUG:
-    CSRF_TRUSTED_ORIGINS = ['http://392f-178-176-214-192.ngrok-free.app', 'https://392f-178-176-214-192.ngrok-free.app']
-CORS_ORIGIN_WHITELIST = ['392f-178-176-214-192.ngrok-free.app']
-ALLOWED_HOSTS = ['392f-178-176-214-192.ngrok-free.app', '127.0.0.1:8000', '127.0.0.1',]
+    CSRF_TRUSTED_ORIGINS = ['http://397d-2a03-d000-1684-2afa-2060-c4fe-8fa1-d0d6.ngrok-free.app', 'https://397d-2a03-d000-1684-2afa-2060-c4fe-8fa1-d0d6.ngrok-free.app']
+CORS_ORIGIN_WHITELIST = ['397d-2a03-d000-1684-2afa-2060-c4fe-8fa1-d0d6.ngrok-free.app']
+ALLOWED_HOSTS = ['397d-2a03-d000-1684-2afa-2060-c4fe-8fa1-d0d6.ngrok-free.app', '127.0.0.1:8000', '127.0.0.1',]
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media').replace('\\', '/')
 MEDIA_URL = '/media/'
@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'tasks',
     'home',
     'webpush',
+    'notification',
     'review_assistant',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -84,9 +85,15 @@ TEMPLATES = [
             ],
         },
     },
+    {
+        "BACKEND": "django.template.backends.jinja2.Jinja2",
+        "DIRS": [
+            "/home/html/jinja2",
+        ],
+    },
 ]
 
-LOGIN_REDIRECT_URL = '/home_page/'
+LOGIN_REDIRECT_URL = '/'
 
 WSGI_APPLICATION = 'review_assistant.wsgi.application'
 
@@ -138,7 +145,7 @@ TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)

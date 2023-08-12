@@ -1,8 +1,8 @@
 {
     "name": "Review assistant",
     "short_name": "review_assistant",
-    "start_url": "/home_page/",
-    "scope": ".",
+    "start_url": "/",
+    "scope": "./",
     "display": "standalone",
     "background_color": "#FFF",
     "theme_color": "#FFF",

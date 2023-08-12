@@ -1,18 +1,12 @@
-{% extends "review_assistant/base_generic.html" %}
-{% block content %}
-<div class="card shadow" style="max-width: 800px;">
-    <div class="card-header">
-        <h5 class="card-title">
-            <a href="{% url 'task' task.id %}">№{{task.id}}</a>
-        </h5>
+<div class="card my-1 " style="max-width: 300px;">
+    <div class="card-header {% if task.hitch == True and task.execution_or_no == False %}text-bg-danger{% elif task.in_progres == True and task.execution_or_no == False %}text-bg-primary{% elif task.date_of_the_completed_correspondence != None and task.execution_or_no == False %}text-bg-warning{% elif task.date_of_writing_the_review != None and task.execution_or_no == False %}text-bg-warning{% else %}{% endif %}">
+        <h5 class="card-title">Число - {{task.correspondence_date.date}}
+            Задание - <a href="{% url 'task' task.id %}">№{{task.id}}</a></h5>
     </div>
-    <div class="card-body row">
-        <div class="col p-2 flex-column" style="max-width: 280px;">
-            <img src="{{task.image.img.url}}" class="img-thumbnail rounded float-start m-2" style="max-width: 250px;">
-        </div>
+    <div class="card-body">
         <div class="col flex-column" style="min-width: 250px;">
             {% if user.is_staff %}
-                <p class="card-text">Исполнитель: <a href="{% url 'executor' task.executor.id %}">{{task.executor.name}}</a></p>
+                <p class="card-text">Исполнитель: <a href="{% url 'executor' task.executor_id.id %}">{{task.executor_id.name}}</a></p>
                 <p class="card-text">Текст отзыва: {{task.text_review}}</p>
                 <p class="card-text">Дата переписки: {{task.correspondence_date.date}} {{task.correspondence_date.time}}</p>
                 <p class="card-text">Дата окончания переписки: {{task.date_of_the_completed_correspondence.date}} {{task.date_of_the_completed_correspondence.time}}</p>
@@ -53,7 +47,7 @@
                     <a href="{% url 'confirm_correspondence' task.id %}" class="btn btn-primary">Подтвердить переписку</a>
                 {% elif task.date_of_the_completed_correspondence == None and task.hitch %}
                     <p class="card-text "><i class="bi bi-exclamation-circle-fill text-danger"></i> Вы не написали вовремя, задача приостановлена</p>
-                {% elif not task.date_of_the_completed_correspondence == None %}
+                {% elif not task.date_of_the_completed_correspondence == None and not task.hitch %}
                     <p class="card-text">Дата переписки: {{task.correspondence_date.date}} {{task.correspondence_date.time}}</p>
                     <p class="card-text"> <i class="bi bi-check-circle-fill text-success"></i> Дата окончания переписки: {{task.date_of_the_completed_correspondence.date}} {{task.date_of_the_completed_correspondence.time}}</p>
 
@@ -76,7 +70,7 @@
                         </form>
 
                     {% elif task.date_of_writing_the_review == None and task.hitch %}
-                        <p class="card-text"><i class="bi bi-exclamation-circle-fill text-danger"></i> Вы не подтвердили написание отзыва, задача приостановлена</p>
+                        <p class="card-text text-bg-danger"><i class="bi bi-exclamation-circle-fill text-danger"></i> Вы не подтвердили написание задача приостановлена</p>
                     {% elif not task.date_of_writing_the_review == None and not task.hitch %}
                         <p class="card-text">Дата отзыва: {{task.date_of_withdrawal.date}} {{task.date_of_withdrawal.time}}</p>
                         <p class="card-text"> <i class="bi bi-check-circle-fill text-success"></i> Дата написания отзыва: {{task.date_of_writing_the_review.date}} {{task.date_of_writing_the_review.time}}</p>
@@ -88,11 +82,6 @@
                 {% endif %}
             {% endif %}
         </div>
+
     </div>
-    {% if user.is_staff %}
-    <div class="card-footer">
-        <a href="{% url 'edit_task' task.id %}" class="btn btn-primary">Изменить</a>
-    </div>
-    {% endif %}
 </div>
-{% endblock %}

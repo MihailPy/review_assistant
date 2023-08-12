@@ -1,19 +1,38 @@
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .forms import UserRegisterForm
 from executors.models import Executor
+from .home_service import *
 
 
 @login_required
 def home(request):
+    webpush_settings = getattr(settings, 'WEBPUSH_SETTINGS', {})
+    vapid_key = webpush_settings.get('VAPID_PUBLIC_KEY')
     user = request.user
     if not user.is_staff:
         executor = Executor.objects.get(user=user)
-        return render(request, 'home/home_page.html', {'user': user, 'executor': executor})
-    return redirect("home_admin")
-
-
+        today = get_today(executor)
+        tomorrow = get_tomorrow(executor)
+        after = get_after(executor)
+        return render(request, 'home/home_page.html', {'user': user,
+                                                       'executor': executor,
+                                                       'today': today,
+                                                       'tomorrow': tomorrow,
+                                                       'after': after,
+                                                       "datetime": datetime.today(),
+                                                       'vapid_key': vapid_key})
+    else:
+        yesterday = get_yesterday(False)
+        today = get_today(False)
+        tomorrow = get_tomorrow(False)
+        return render(request, 'home/home_admin.html', {'user': user,
+                                                        'today': today,
+                                                        'tomorrow': tomorrow,
+                                                        'yesterday': yesterday
+                                                        'vapid_key': vapid_key})
 
 
 def register(request):

@@ -34,7 +34,7 @@
 
 
 <div class="col-md-5 flex-shrink-0">
-    <div id="carousel" class="carousel slide vertical" data-bs-pause="mouseenter">
+    <div id="carousel" class="carousel slide vertical" data-bs-pause="mouseenter" touch="True">
           <div class="carousel-inner">
               {% for i in img %}
                 <div class="carousel-item {%if i == img.0 %}active{% endif %}">
@@ -62,4 +62,12 @@
     <script>var myCarousel = document.querySelector('#carousel')
             var carousel = new bootstrap.Carousel(myCarousel)</script>
 </div>
+<script>
+    document.addEventListener('swiped-up', function(e) {
+        console.log('swiped-up'); // the element that was swiped
+    });
+    document.addEventListener('swiped-down', function(e) {
+        console.log('swiped-down'); // the element that was swiped
+    });
+</script>
 {% endblock %}

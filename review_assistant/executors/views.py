@@ -29,7 +29,7 @@ def create_executor_page(request):
             form = Executor_form(request.POST)
             if form.is_valid():
                 executor = save_executor(form, Executor(), request)
-                return redirect("home_page")
+                return redirect("home")
         else:
             print(request.user)
             executor = Executor.objects.all()
@@ -70,7 +70,6 @@ def delete_executor(request, id):
 @login_required
 def profile(request):
     try:
-        print(request.user)
         executor = Executor.objects.get(user=request.user)
         return render(request, 'executors/profile.html', context={'executor': executor, })
     except Executor.DoesNotExist:

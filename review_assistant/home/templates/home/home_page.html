@@ -1,35 +1,20 @@
 {% extends "review_assistant/base_generic.html" %}
 {% block content %}
+<div class="row row-cols-auto">
 {% if not executor.last_name and not executor.date_create and not executor.phone and not executor.card_number and not user.is_staff %}
-    <div class="card w-100 m-auto" style="width: 100%!important;max-width: 400px;padding: 15px;margin: auto!important;">
+    <div class="card m-3 p-2" style="max-width: 400px;">
         <p class="text-center">Пожалуйста добавьте свои данные </p>
         <a type="button" href="{% url 'edit_profile' %}" class="btn btn-primary">Добавить данные</a>
     </div>
 {% endif %}
-<input class="btn" type="button" onclick="notifSet ()" value="Notify">
+{% if today %}
+    {% for task in today %}
+    <div class="m-1">
+        {% include "tasks/task_layout.html" %}
+    </div>
+    {% endfor %}
+{% endif %}
+</div>
 <script>
-    function notifyMe () {
-        var notification = new Notification("Header", {
-            body: "body",
-            icon: "http://127.0.0.1:8000/static/icons/minion.jpg"
-        });
-    };
-    function notifSet () {
-        if (!("Notification" in window)){
-            alert("Ваш браузер не поддерживает уведомления");
-            }
-        else if (Notification.permission === "granted"){
-            setTimeout(notifyMe, 2000);
-            }
-        else if (Notification.permission !== "denied") {
-            Notification.requestPermission (function (permission){
-                if (!('permission' in Notification))
-                    Notification.permission = permission;
-                if (permission == "granted")
-                    alert("2000");
-                    setTimeout(notifyMe, 2000);
-            });
-        }
-    }
 </script>
 {% endblock %}

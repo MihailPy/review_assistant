@@ -1,28 +1,17 @@
-from django.contrib.auth.decorators import login_required
 from django.http.response import JsonResponse, HttpResponse
 from django.views.decorators.http import require_GET, require_POST
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
+from django.views.generic import TemplateView
 from webpush import send_user_notification
 import json
-from django.views.generic import TemplateView
-from django.conf import settings
 
 
 class ServiceWorkerView(TemplateView):
     template_name = 'sw.js'
     content_type = 'application/javascript'
     name = 'sw.js'
-
-
-@login_required
-def home_admin(request):
-    webpush_settings = getattr(settings, 'WEBPUSH_SETTINGS', {})
-    vapid_key = webpush_settings.get('VAPID_PUBLIC_KEY')
-    user = request.user
-    print("send")
-    return render(request, 'home/home_admin.html', {user: user, 'vapid_key': vapid_key})
 
 
 @require_POST
@@ -36,7 +25,7 @@ def send_push(request):
             return JsonResponse(status=400, data={"message": "Invalid data format"})
 
         user_id = data['id']
-        user = request.user
+        user = get_object_or_404(User, pk=user_id)
         payload = {'head': data['head'], 'body': data['body']}
         send_user_notification(user=user, payload=payload, ttl=1000)
 

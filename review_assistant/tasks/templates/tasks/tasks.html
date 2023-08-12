@@ -2,9 +2,8 @@
 {% block content %}
 <div class="container">
     <h2 class="display-5">Задачи</h2>
-    {% if orders.count > 0 %}
     <div class="accordion" id="accordionExample">
-        {% for order in orders %}
+        {% for order, tasks in orders.zipped %}
             <div class="accordion-item">
                 <h2 class="accordion-header" id="heading{{order.id}}">
                   <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{order.id}}" aria-expanded="false" aria-controls="collapse{{order.id}}">
@@ -42,5 +41,4 @@
         {% endfor %}
     </div>
 </div>
-{% endif %}
 {% endblock %}

@@ -21,6 +21,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from . import views
+from .views import send_push
 
 urlpatterns = [
                   path('admin/', admin.site.urls),
@@ -28,10 +29,10 @@ urlpatterns = [
                   path('executors/', include("executors.urls")),
                   path('orders/', include("orders.urls")),
                   path('tasks/', include("tasks.urls")),
+                  path('notify/', include("notification.urls")),
                   path('', include("home.urls")),
-                  path('send_push', views.send_push),
-                  path('webpush/', include('webpush.urls')),
-                  path('home_admin/', views.home_admin, name='home_admin'),
+                  path('send_push', send_push),
+                  path('webpush/', include('webpush.urls'))
                   path('sw.js',
                        views.ServiceWorkerView.as_view(),
                        name=views.ServiceWorkerView.name,

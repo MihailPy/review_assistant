@@ -1,114 +1,59 @@
-//console.log('registerSw');
-//function checkWorkerAndPushManager () {
-//    if (!('serviceWorker' in navigator)) {
-//        console.log('Workers are not supported.');
-//        return;
-//    }
-//    if (!('PushManager' in window)) {
-//        console.log('Push notifications are not supported.');
-//        return;
-//    }
-//}
-//
-//function registerWorker () {
-//	window.addEventListener('load', function () {
-//        navigator.serviceWorker.register('/sw.js').then(function (registration) {
-//            console.log('ServiceWorker registration successful');
-//        }, function (err) {
-//            console.log('ServiceWorker registration failed: ', err);
-//            return;
-//        });
-//    });
-//	return true;
-//}
-//var worker = registerWorker ()
-const registerSw = async () => {
-    if ('serviceWorker' in navigator) {
-        const reg = await navigator.serviceWorker.register('/sw.js');
-        initialiseState(reg)
-
-    } else {
-        showNotAllowed("You can't send push notifications ☹️😢")
+window.addEventListener('load', async () => {
+  if ('serviceWorker' in navigator) {
+    try {
+      const reg = await navigator.serviceWorker.register('/sw.js')
+      console.log('Service worker register success', reg)
+    } catch (e) {
+      console.log('Service worker register fail')
     }
-};
+  }
 
-//const initialiseState = (reg) => {
-//    if (!reg.showNotification) {
-//        showNotAllowed('Showing notifications isn\'t supported ☹️😢');
-//        return
-//    }
-//    if (Notification.permission === 'denied') {
-//        showNotAllowed('You prevented us from showing notifications ☹️🤔');
-//        return
-//    }
-//    if (!'PushManager' in window) {
-//        showNotAllowed("Push isn't allowed in your browser 🤔");
-//        return
-//    }
-//    subscribe(reg);
-//}
-
-const showNotAllowed = (message) => {
-    const button = document.querySelector('form>button');
-    button.innerHTML = `${message}`;
-    button.setAttribute('disabled', 'true');
-};
-
-function urlB64ToUint8Array(base64String) {
-    const padding = '='.repeat((4 - base64String.length % 4) % 4);
-    const base64 = (base64String + padding)
-        .replace(/\-/g, '+')
-        .replace(/_/g, '/');
-
-    const rawData = window.atob(base64);
-    const outputArray = new Uint8Array(rawData.length);
-    const outputData = outputArray.map((output, index) => rawData.charCodeAt(index));
-
-    return outputData;
+})
+if ('serviceWorker' in navigator && 'SyncManager' in window) {
+  navigator.serviceWorker.ready.then(function(reg) {
+    console.log('create myFirstSync')
+    return reg.sync.register('myFirstSync');
+  }).catch(function() {
+    // system was unable to register for a sync,
+    // this could be an OS-level restriction
+    getUpdate();
+  });
+} else {
+  // serviceworker/sync not supported
+  getUpdate();
 }
-
-const subscribe = async (reg) => {
-    const subscription = await reg.pushManager.getSubscription();
-    if (subscription) {
-        sendSubData(subscription);
-        return;
-    }
-
-    const vapidMeta = document.querySelector('meta[name="vapid-key"]');
-    const key = vapidMeta.content;
-    const options = {
-        userVisibleOnly: true,
-        // if key exists, create applicationServerKey property
-        ...(key && {applicationServerKey: urlB64ToUint8Array(key)})
-    };
-
-    const sub = await reg.pushManager.subscribe(options);
-    sendSubData(sub)
-};
-
-const sendSubData = async (subscription) => {
-    const browser = navigator.userAgent.match(/(firefox|msie|chrome|safari|trident)/ig)[0].toLowerCase();
-    const data = {
-        status_type: 'subscribe',
-        subscription: subscription.toJSON(),
-        browser: browser,
-        user_agent: navigator.userAgent,
-    };
-
-    const res = await fetch('/webpush/save_information', {
-        method: 'POST',
-        body: JSON.stringify(data),
-        headers: {
-            'content-type': 'application/json'
-        },
-        credentials: "include"
+function notifyMe(header, body) {
+    Notification.requestPermission(function(result) {
+      if (result === 'granted') {
+        navigator.serviceWorker.ready.then(function (registration) {
+            registration.showNotification(header, {body: body,});
+        });
+      }
     });
-
-    handleResponse(res);
 };
-
-const handleResponse = (res) => {
-    console.log(res.status);
-};
-
-registerSw();
+function getUpdate(){
+$.ajax({
+    url: '/notify/',         /* Куда отправить запрос */
+    method: 'get',             /* Метод запроса (post или get) */
+    dataType: 'json',          /* Тип данных в ответе (xml, json, script, html). */
+    date: {data: "data"},
+    success: function(data){   /* функция которая будет выполнена после успешного запроса.  */
+        $.each(data, function(i, item) {
+            date = Date.parse(item.datetime_notify);
+            window.addEventListener('push');
+            var today = new Date();
+            if (date < today) {
+                if (item.shown != true) {
+                    notifyMe(item.header, item.body);
+                    $.ajax({
+                      url: '/notify/shown_notify/'+i,
+                      method: 'get',
+                    })
+                }
+            }
+        });
+    }
+});
+notifyMe('item.header', 'item.body');
+}
+setInterval('getUpdate', 5000);

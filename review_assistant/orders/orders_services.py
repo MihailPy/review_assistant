@@ -1,6 +1,13 @@
 import re
+from datetime import date, timedelta, datetime
+import random
+
 from executors.models import Executor
-from .models import Image_order
+from customers.models import Customer
+from tasks.tasks_services import task_status
+from tasks.models import Tasks
+
+from .models import Image_order, Order
 
 
 def boolean(i):
@@ -58,28 +65,80 @@ def get_img(img):
     return list((img[i], i) for i in range(0, len(img)))
 
 
-def get_the_number_of_reviews(text):
-    return len(re.split(r"[#]\s*", text))
+def get_text_of_reviews(text):
+    # Разделяем текст по решетке
+    return re.split(r"[#]\s*", text)
+
+
+def get_executors_list():
+    # Выбераем исполнителей без задач или с задачами давностью неделя
+    executors_list = []
+    executors = Executor.objects.all()
+    for executor in executors:
+        te = Tasks.objects.filter(executor=executor)
+        if len(te):
+            te = sorted(te, key=lambda i: i.correspondence_date)
+            if date.today() - timedelta(days=7) > te[0].date_of_withdrawal.date():
+                executors_list.append(executor)
+        else:
+            executors_list.append(executor)
+
+    return executors_list
 
 
 def valid_order(order):
+    # Проверяем на валидность заказ хватает ли исполнителей, текста и скриншотов
     valid = []
+    valid_bool = True
     amount = order.amount
-    num_rewiews = get_the_number_of_reviews(order.text)
+    num_rewiews = len(get_text_of_reviews(order.text))
     len_img = len(get_img(Image_order.objects.all().filter(order=order.id)))
-    executors_len = len(Executor.objects.all())
+    executors_len = len(get_executors_list())
 
     if num_rewiews < amount:
         valid.append({"text_reviews_error": True})
+        valid_bool = False
     else:
         valid.append({"text_reviews_error": False})
     if len_img < amount:
         valid.append({"img_error": True})
+        valid_bool = False
     else:
         valid.append({"img_error": False})
     if executors_len < amount:
         valid.append({"executors_error": True})
+        valid_bool = False
     else:
         valid.append({"executors_error": False})
+    return valid, valid_bool
 
-    return valid
+
+def divide_into_tasks_func(id):
+    order = Order.objects.get(id=id)
+    _, valid = valid_order(order)
+    if not len(Tasks.objects.all().filter(order=id)) and valid:
+        executors_list = get_executors_list()
+        date_start = order.date_order_start
+        date_end = order.date_order_end
+        task_texts = get_text_of_reviews(order.text)
+        images = get_img(Image_order.objects.all().filter(order=id))
+
+        for i in range(0, order.amount):
+            task = Tasks()
+            task.order = order
+            task.image = images[i][0]
+            task.executor = executors_list[i]
+            task.text_review = task_texts[i]
+            task.correspondence_date = date_start
+            task.date_of_withdrawal = date_start + timedelta(random.randint(1, 2))
+            task.hitch = False
+            task.in_progres = False
+            task.execution_or_no = False
+            task.paymant = False
+            # добавить время к дате
+            date_start += timedelta(random.randint(1, 3))
+            if date_start > date_end:
+                date_start = order.date_order_start
+            if task.date_of_withdrawal > date_end:
+                task.date_of_withdrawal = date_end
+            task.save()
